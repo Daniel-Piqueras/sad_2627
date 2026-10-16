@@ -2,7 +2,7 @@
 |---|---------------------|------|-------------------|-----------------------|
 | 1 | Un socio abre factura_marzo.pdf.exe; poco después todo el disco compartido está cifrado y aparece un mensaje pidiendo 800 € | Ransomware | No | No |
 | 2 | Un "optimizador gratuito" de PC que, además, envía todo lo que se teclea a un servidor externo | Keyloger | No | No |
-| 3 | Sin que nadie haga nada, un programa salta de portátil en portátil a través de la wifi del estudio | Leapfrog | Si | No |
+| 3 | Sin que nadie haga nada, un programa salta de portátil en portátil a través de la wifi del estudio |  |  |  |
 | 4 | Al abrir ciertos ejecutables, éstos infectan a su vez a otros ficheros del equipo |  |  |  |
 | 5 | Tras instalar un editor de PDF gratuito, aparecen ventanas de publicidad constantemente |  |  |  |
 | 6 | Un antiguo colaborador dejó un código que borrará los planos el 31 de diciembre |  |  |  |
