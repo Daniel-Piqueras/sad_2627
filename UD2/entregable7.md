@@ -512,13 +512,13 @@ Esta práctica está directamente relacionada con el inventario realizado en pr�
 
 | Medida | Preventiva | Paliativa |
 |----------|:---:|:---:|
-| Mantener el sistema actualizado | ✅ | |
-| ClamAV escaneando a demanda un disco | | ✅ |
-| Descargar software solo de repositorios oficiales | ✅ | |
-| Copia de seguridad semanal desconectada de la red | | ✅ |
-| Cuenta de usuario sin privilegios de administrador | ✅ | |
-| rkhunter tras sospechar una intrusión | | ✅ |
-| Formación del personal contra phishing | ✅ | |
+| Mantener el sistema actualizado | Si | |
+| ClamAV escaneando a demanda un disco | | Si |
+| Descargar software solo de repositorios oficiales | Si | |
+| Copia de seguridad semanal desconectada de la red | | Si |
+| Cuenta de usuario sin privilegios de administrador | Si | |
+| rkhunter tras sospechar una intrusión | | Si |
+| Formación del personal contra phishing | Si | |
 
 ---
 
