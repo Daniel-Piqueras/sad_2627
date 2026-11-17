@@ -43,7 +43,7 @@ Apache2 Default Page
 
 ### ¿Qué indica el navegador?
 
-El navegador indica que la conexión no es segura porque se está utilizando HTTP y no HTTPS. La información viaja sin cifrar y podría ser interceptada o modificada por un atacante situado en la misma red.
+El navegador indica que la conexión no es segura porque se está utilizando HTTP y no HTTPS. La información viaja sin cifrar y podría ser interceptada o modificada por un atacante situado en la red.
 
 ---
 
@@ -89,7 +89,7 @@ ca.key
 
 ### Reflexión
 
-La clave privada de una CA debe protegerse con una contraseña incluso aunque esté almacenada en un directorio con permisos restrictivos. Si un atacante consiguiera copiar el archivo, seguiría necesitando la frase de paso para utilizarlo.
+La clave privada de una CA debe protegerse con una contraseña incluso aunque esté almacenada en un directorio con permisos restrictivos. Si un atacante consiguiera copiar el archivo, seguiría necesitando la contraseña para poder usarla.
 
 ---
 
@@ -307,20 +307,20 @@ Comando:
 
 ```bash
 curl -I https://192.168.57.2
-``
+```
 
 Resultado:
 
 ```text
 SSL certificate problem:
-unable to get local ussuer certificate
+unable to get local issuer certificate
 ```
 
 Posteriormente:
 
 ```bash
 curl -I --cacert ~/ca/certs/ca.crt https://192.168.57.2
-*``
+```
 
 Resultado:
 
@@ -332,7 +332,7 @@ HTTP/1.1 200 OK
 
 El primero comando falla porque el sistema no conoce la Autoridad Certificadora de Torrent S.L.
 
-El segundo funciona porque se indica explícitamente curl que debe confiar en dicha CO.
+El segundo funciona porque se indica explícitamente a curl que debe confiar en dicha CA.
 
 ---
 
@@ -343,11 +343,11 @@ Se publicó el certificado:
 sudo cp ~/ca/certs/ca.crt /var/www/html/torrent-ca.crt
 ```
 
-OBtención de la huella digital:
+Obtención de la huella digital:
 
-```*ash
-openssl x509 -in ~/ca/certs/ca*crt -noout -fingerprint -sha256
-``*
+```bash
+openssl x509 -in ~/ca/certs/ca.crt -noout -fingerprint -sha256
+```
 
 Resultado:
 
@@ -358,42 +358,43 @@ Resultado:
 La CA fue importada en Firefox tras comprobar que la huella coincidía exactamente.
 
 Tras la importación, el navegador mostró conexión segura mediante HTTPS.
+
 ### ¿Por qué es peligroso descargar la CA sin verificar la huella?
 
-porque un atacante podría sustituir*el certificado por otro malicioso. Si el usuario lo importara sin comprobar la huella, estaría confiando en una CA falsa.
+Porque un atacante podría sustituir el certificado por otro malicioso. Si el usuario lo importara sin comprobar la huella, estaría confiando en una CA falsa.
 
 ---
 
-# Paso 12 -*Inspección de la conexión TLS
+# Paso 12 - Inspección de la conexión TLS
 
 Comando:
 
 ```bash
-openssl s_client -co*nect 192.168.57.2:443 \
+openssl s_client -connect 192.168.57.2:443 \
 -CAfile ~/ca/certs/ca.crt \
-</dev/null 2>/dev*null | grep -E 's:|i:|Verify retur* code|Cipher'
+</dev/null 2>/dev/null | grep -E 's:|i:|Verify return code|Cipher'
 ```
 
 Resultado:
 
-```*ext
-s:C = ES, O = Torrent S.L., CN*= hmi.torrent.local
+```text
+s:C = ES, O = Torrent S.L., CN = hmi.torrent.local
 ```
 
 ```text
-i:C = ES, O = Torrent S.L., CN = Tor*ent S.L. CA Raiz
+i:C = ES, O = Torrent S.L., CN = Torrent S.L. CA Raiz
 ```
 
 ```text
-TLSv.3
+TLSv1.3
 ```
 
 ```text
-TLS_AES_256_GCM_SHA 384
+TLS_AES_256_GCM_SHA384
 ```
 
 ```text
-Verify return cod: 0 (ok)
+Verify return code: 0 (ok)
 ```
 
 ### Investigación
@@ -401,31 +402,31 @@ Verify return cod: 0 (ok)
 Sin utilizar `-CAfile`:
 
 ```bash
-openssl s_client -connect 192.168.57.2*443 \
+openssl s_client -connect 192.168.57.2:443 \
 </dev/null 2>/dev/null | grep -E 'Verify return code'
 ```
 
 Resultado:
 
 ```text
-Verify return code: 21 (unable to verify the first cer*ificate)
+Verify return code: 21 (unable to verify the first certificate)
 ```
 
-Esto ocurre porque la CA de Torrent S.L. no forma parte*de las autoridades de confianza instaladas en el sistema.
+Esto ocurre porque la CA de Torrent S.L. no forma parte de las autoridades de confianza instaladas en el sistema.
 
 ---
 
 # Paso 13 - Copia de seguridad
 
-Comando:*
+Comando:
 ```bash
 tar czf ~/ca-torrent-backup.tar.gz -C ~ ca
 ```
 
 Resultado:
 
-``text
+```text
 ca-torrent-backup.tar.gz
-``
+```
 
-La copia de seguridad se guardara para futuras prácticas relacionadas con VPN y certificados.
+La copia de seguridad se guardará para futuras prácticas relacionadas con VPN y certificados.
