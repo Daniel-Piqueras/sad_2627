@@ -45,36 +45,33 @@ Además de las cuatro zonas base (**Internet**, **DMZ**, **LAN** y **Zona críti
 
 ```mermaid
 flowchart LR
-    Internet((Internet)) -->|HTTPS / SMTP / VPN| FW1[Cortafuegos Exterior FW1]
-    Guest["Red de Invitados (VLAN Guest)"] -->|Solo salida web| FW1
+    Internet(["Internet"]) -->|"HTTPS, SMTP, VPN"| FW1["Cortafuegos Exterior FW1"]
+    Guest["Red de Invitados - VLAN Guest"] -->|"Solo salida web"| FW1
 
-    subgraph DMZ["DMZ · Semiconfiable"]
-        Web[Web Corporativa]
-        Mail[Servidor de Correo]
-        VPN[Pasarela VPN]
-        Proxy[Proxy Inverso / Saliente]
+    subgraph DMZ["DMZ - Semiconfiable"]
+        Web["Web Corporativa"]
+        Mail["Servidor de Correo"]
+        VPN["Pasarela VPN"]
+        Proxy["Proxy Inverso y Saliente"]
     end
 
     FW1 --> DMZ
-    DMZ --> FW2[Cortafuegos Interior FW2]
+    DMZ --> FW2["Cortafuegos Interior FW2"]
 
-    subgraph LAN["LAN · Confiable"]
-        PC[Portátiles Ingenieros y Operarios]
+    subgraph LAN["LAN - Confiable"]
+        PC["Portátiles Ingenieros y Operarios"]
     end
 
-    subgraph Critica["Zona Crítica · Restringida"]
-        HMI["HMI Planta (hmi.torrent.local) y Planos"]
-        CA["Autoridad Certificación (srv-ca)"]
-        Backup[Servidor Copias Seguridad]
-        Logs[Registros y Monitorización]
+    subgraph Critica["Zona Crítica - Restringida"]
+        HMI["HMI Planta hmi.torrent.local y Planos"]
+        CA["Autoridad Certificación srv-ca"]
+        Backup["Servidor Copias Seguridad"]
+        Logs["Registros y Monitorización"]
     end
 
     FW2 --> LAN
     FW2 --> Critica
 ```
-
----
-
 ## 4. Reflexión
 
 Si el servidor web cae comprometido, el atacante solo podrá alterar la página pública o leer los ficheros locales de esa máquina dentro de la DMZ, pero no podrá saltar hacia los portátiles de la LAN ni alcanzar el panel HMI (`hmi.torrent.local`), los planos, las copias de seguridad o la CA (`srv-ca`). Se lo impide el **cortafuegos interior (`FW2`)**, que bloquea por defecto todo tráfico iniciado desde la DMZ hacia la LAN y la Zona crítica, mientras que el servidor de monitorización en la Zona crítica conserva intactos los registros del ataque.
